@@ -1,23 +1,11 @@
 <script setup lang="ts">
-const colorMode = useColorMode();
-const theme = ref({
-  dark() {
-    colorMode.preference = 'dark';
-  },
-  light() {
-    colorMode.preference = 'light';
-  },
-  active: false,
-});
+import { Moon, Sun } from 'lucide-vue-next';
 
-const handleChange = (state: boolean) => {
-  if (state) {
-    theme.value.light();
-    theme.value.active = true;
-  } else {
-    theme.value.dark();
-    theme.value.active = false;
-  }
+const colorMode = useColorMode();
+const handleChange = () => {
+  colorMode.value === 'dark'
+    ? (colorMode.preference = 'light')
+    : (colorMode.preference = 'dark');
 };
 </script>
 
@@ -25,21 +13,27 @@ const handleChange = (state: boolean) => {
   <header>
     <div class="flex gap-3 justify-center">
       <div
-        class="flex border border-white shadow-md rounded-full px-6 py-3 m-3 gap-3"
+        class="flex items-center border dark:border-white border-black shadow-lg rounded-full px-4 py-2 m-3 gap-3"
       >
         <p>indrakoslab</p>
         <span>|</span>
         <nav>
           <ul class="flex flex-row gap-6">
             <li>Home</li>
-            <li>About</li>
             <li>Blog</li>
           </ul>
         </nav>
+
         <span>|</span>
-        <p>Dark</p>
-        <Switch :checked="theme.active" @update:checked="handleChange" />
-        <p>Light</p>
+
+        <ColorScheme>
+          <Button :variant="'ghost'" :size="'icon'" @click="handleChange()">
+            <component
+              :is="colorMode.value == 'dark' ? Moon : Sun"
+              class="w-5 h-5"
+            />
+          </Button>
+        </ColorScheme>
       </div>
     </div>
   </header>
