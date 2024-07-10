@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { PlugZap } from 'lucide-vue-next';
+
+const value = ref('');
+const editor = ref({
+  lang: 'json',
+  options: {
+    minimap: {
+      enabled: false,
+    },
+    theme: 'vs-dark',
+  },
+  value: value,
+});
+
+value.value = `{
+  "name": "Indra Putra",
+  "github": "indraakkk"
+}`;
+</script>
+
 <template>
   <div class="container mx-auto">
     <div
@@ -15,8 +36,24 @@
         >
       </div>
       <div
-        class="w-full md:w-1/2 min-h-96 border dark:border-white border-black"
-      ></div>
+        class="flex flex-col w-full md:w-1/2 h-fit rounded-lg border border-white"
+      >
+        <ColorScheme :placeholder="'loading...'">
+          <div class="flex gap-3">
+            <span>profile.json</span>
+            <span>main-stack.json</span>
+            <span>secondary-stack.json</span>
+          </div>
+
+          <MonacoEditor
+            class="w-full min-h-96 rounded-lg!"
+            v-model="editor.value"
+            :lang="editor.lang"
+            :options="editor.options"
+          />
+          <div><PlugZap class="w-5 h-5 m-1" /></div>
+        </ColorScheme>
+      </div>
     </div>
   </div>
 </template>

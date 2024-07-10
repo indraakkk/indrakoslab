@@ -1,18 +1,22 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
   components: [
     {
       path: '~/components',
       pathPrefix: false,
     },
   ],
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     'shadcn-nuxt',
     '@nuxtjs/google-fonts',
+    'nuxt-monaco-editor',
   ],
+
   googleFonts: {
     families: {
       Inter: {
@@ -21,6 +25,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -32,6 +37,7 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui',
   },
+
   colorMode: {
     preference: 'system',
     fallback: 'light',
@@ -42,4 +48,15 @@ export default defineNuxtConfig({
     classSuffix: '',
     storageKey: 'nuxt-color-mode',
   },
+
+  monacoEditor: {
+    // These are default values:
+    locale: 'en',
+    componentName: {
+      codeEditor: 'MonacoEditor',
+      diffEditor: 'MonacoDiffEditor',
+    },
+  },
+
+  compatibilityDate: '2024-07-10',
 });
