@@ -45,12 +45,16 @@ value.value = `{
             <span>secondary-stack.json</span>
           </div>
 
-          <MonacoEditor
-            class="w-full min-h-96 rounded-lg!"
+          <LazyEditorMonaco
             v-model="editor.value"
-            :lang="editor.lang"
-            :options="editor.options"
+            class="w-full min-h-96 rounded-lg!"
           />
+          <!-- <MonacoEditor
+          class="w-full min-h-96 rounded-lg!"
+          v-model="editor.value"
+          :lang="editor.lang"
+          :options="editor.options"
+        /> -->
           <div><PlugZap class="w-5 h-5 m-1" /></div>
         </ColorScheme>
       </div>

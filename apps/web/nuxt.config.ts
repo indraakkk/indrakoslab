@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxtjs/google-fonts',
     'nuxt-monaco-editor',
+    "@nuxt/eslint"
   ],
 
   googleFonts: {
