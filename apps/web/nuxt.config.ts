@@ -15,8 +15,18 @@ export default defineNuxtConfig({
     'shadcn-nuxt',
     '@nuxtjs/google-fonts',
     'nuxt-monaco-editor',
-    "@nuxt/eslint"
+    '@nuxt/eslint',
   ],
+
+  app: {
+    head: {
+      titleTemplate: 'Indrakoslab',
+      htmlAttrs: {
+        lang: 'en-US',
+      },
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    },
+  },
 
   googleFonts: {
     families: {
