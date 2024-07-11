@@ -9,8 +9,9 @@ const handleChange = () => {
     : (colorMode.preference = 'dark');
 };
 
+const config = useRuntimeConfig();
 const isProduction = ref();
-isProduction.value = process.env.APP_ENV === 'production';
+isProduction.value = config.public.appEnv === 'production';
 </script>
 
 <template>
@@ -29,7 +30,7 @@ isProduction.value = process.env.APP_ENV === 'production';
             <li>
               <NuxtLink
                 v-if="isProduction"
-                to="https://indrakoslab.vercel.app"
+                to="https://indrakoslab-blog.vercel.app"
                 target="_blank"
                 rel="noopener"
               >
