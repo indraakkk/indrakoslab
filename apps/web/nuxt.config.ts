@@ -15,11 +15,6 @@ export default defineNuxtConfig({
     'nuxt-monaco-editor',
     '@nuxt/eslint',
   ],
-  runtimeConfig: {
-    public: {
-      appEnv: process.env.APP_ENV,
-    },
-  },
   app: {
     head: {
       titleTemplate: 'Indrakoslab',

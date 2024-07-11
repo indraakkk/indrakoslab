@@ -9,9 +9,8 @@ const handleChange = () => {
     : (colorMode.preference = 'dark');
 };
 
-const config = useRuntimeConfig();
 const isProduction = ref();
-isProduction.value = config.public.appEnv === 'production';
+isProduction.value = process.env.NODE_ENV === 'production';
 </script>
 
 <template>
