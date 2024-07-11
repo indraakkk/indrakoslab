@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// import { NuxtLink } from '#build/components';
 import { Moon, Sun } from 'lucide-vue-next';
 
 const colorMode = useColorMode();
@@ -7,6 +8,9 @@ const handleChange = () => {
     ? (colorMode.preference = 'light')
     : (colorMode.preference = 'dark');
 };
+
+const isProduction = ref();
+isProduction.value = process.env.NODE_ENV === 'production';
 </script>
 
 <template>
@@ -19,8 +23,27 @@ const handleChange = () => {
         <span>|</span>
         <nav>
           <ul class="flex flex-row gap-6">
-            <li>Home</li>
-            <li>Blog</li>
+            <li>
+              <NuxtLink to="/"> Home </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                v-if="isProduction"
+                to="https://indrakoslab.vercel.app"
+                target="_blank"
+                rel="noopener"
+              >
+                Blog
+              </NuxtLink>
+              <NuxtLink
+                v-if="!isProduction"
+                to="http://localhost:3001"
+                target="_blank"
+                rel="noopener"
+              >
+                Blog
+              </NuxtLink>
+            </li>
           </ul>
         </nav>
 

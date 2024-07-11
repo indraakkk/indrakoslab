@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Heart } from 'lucide-vue-next';
+</script>
+
 <template>
   <div class="min-h-svh flex flex-col justify-between">
     <!-- layout -->
@@ -10,7 +14,9 @@
 
     <!-- footer -->
     <footer class="flex justify-center py-10">
-      <span>Made with ❤️ from SUB</span>
+      <span class="flex items-center"
+        >Made with <Heart class="w-4 h-4 mx-3" /> from SUB</span
+      >
     </footer>
   </div>
 </template>

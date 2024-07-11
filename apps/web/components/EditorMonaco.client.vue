@@ -17,12 +17,12 @@ const el = ref<HTMLDivElement>();
 const colorMode = useColorMode();
 
 const theme = computed(() =>
-  colorMode.value === 'dark' ? 'vitesse-dark' : 'vitesse-light'
+  colorMode.value === 'dark' ? 'tokyo-night' : 'one-light'
 );
 
 // Create the highlighter, it can be reused
 const highlighter = await createHighlighter({
-  themes: ['vitesse-dark', 'vitesse-light'],
+  themes: ['tokyo-night', 'one-light'],
   langs: ['json'],
 });
 
@@ -38,12 +38,13 @@ watch(
     const editor = monaco.editor.create(value, {
       language: 'json',
       theme: theme.value,
-      fontSize: 14,
+      fontSize: 16,
       bracketPairColorization: {
         enabled: false,
       },
       glyphMargin: false,
       automaticLayout: true,
+      wordWrap: 'on',
       folding: false,
       lineDecorationsWidth: 10,
       lineNumbersMinChars: 3,
@@ -66,11 +67,16 @@ watch(
       emit('change', value);
     });
 
+    watch(
+      () => props.modelValue,
+      (value) => {
+        editor.setValue(value);
+      }
+    );
+
     watch(theme, () => monaco.editor.setTheme(theme.value));
   }
 );
-
-monaco;
 </script>
 
 <template>
