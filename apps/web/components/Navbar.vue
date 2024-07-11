@@ -10,7 +10,7 @@ const handleChange = () => {
 };
 
 const isProduction = ref();
-isProduction.value = process.env.NODE_ENV === 'production';
+isProduction.value = process.env.APP_ENV === 'production';
 </script>
 
 <template>
