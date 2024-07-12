@@ -81,9 +81,6 @@ importers:
       nuxt:
         specifier: ^3.12.2
         version: 3.12.3(@parcel/watcher@2.4.1)(@types/node@20.14.10)(eslint@8.57.0)(ioredis@5.4.1)(magicast@0.3.4)(optionator@0.9.4)(rollup@4.18.1)(terser@5.31.2)(typescript@5.5.3)(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2))
-      nuxt-monaco-editor:
-        specifier: ^1.2.9
-        version: 1.2.9(magicast@0.3.4)(monaco-editor@0.50.0)(rollup@4.18.1)(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2))
       radix-vue:
         specifier: ^1.8.5
         version: 1.9.0(vue@3.4.31(typescript@5.5.3))
@@ -4257,11 +4254,6 @@ packages:
     engines: {node: ^16.10.0 || >=18.0.0}
     hasBin: true
 
-  nuxt-monaco-editor@1.2.9:
-    resolution: {integrity: sha512-O51sng1MxDAmmm1drOvlUyu6sMdRQtC7ZeSU/r+Hp8KWDDi0JWblPwMOJ+oxMDBnvWw1mOXEhaUBlLjUTEeU/Q==}
-    peerDependencies:
-      monaco-editor: '*'
-
   nuxt@3.12.3:
     resolution: {integrity: sha512-Qdkc+ucWwFcKsiL/OTF87jbgyFSymwPRKiiu0mvzsd/RXTn4hGiBduAlF3f7Yy0F9pDjSj8XHKDSnHYsDzm6rA==}
     engines: {node: ^14.18.0 || >=16.10.0}
@@ -5769,12 +5761,6 @@ packages:
     peerDependenciesMeta:
       '@nuxt/kit':
         optional: true
-
-  vite-plugin-static-copy@1.0.6:
-    resolution: {integrity: sha512-3uSvsMwDVFZRitqoWHj0t4137Kz7UynnJeq1EZlRW7e25h2068fyIZX4ORCCOAkfp1FklGxJNVJBkBOD+PZIew==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    peerDependencies:
-      vite: ^5.0.0
 
   vite-plugin-vue-inspector@5.1.2:
     resolution: {integrity: sha512-M+yH2LlQtVNzJAljQM+61CqDXBvHim8dU5ImGaQuwlo13tMDHue5D7IC20YwDJuWDODiYc/cZBUYspVlyPf2vQ==}
@@ -10828,18 +10814,6 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  nuxt-monaco-editor@1.2.9(magicast@0.3.4)(monaco-editor@0.50.0)(rollup@4.18.1)(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2)):
-    dependencies:
-      '@nuxt/kit': 3.12.3(magicast@0.3.4)(rollup@4.18.1)
-      defu: 6.1.4
-      monaco-editor: 0.50.0
-      vite-plugin-static-copy: 1.0.6(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2))
-    transitivePeerDependencies:
-      - magicast
-      - rollup
-      - supports-color
-      - vite
-
   nuxt@3.12.3(@parcel/watcher@2.4.1)(@types/node@20.14.10)(eslint@8.57.0)(ioredis@5.4.1)(magicast@0.3.4)(optionator@0.9.4)(rollup@4.18.1)(terser@5.31.2)(typescript@5.5.3)(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2)):
     dependencies:
       '@nuxt/devalue': 2.0.2
@@ -12636,14 +12610,6 @@ snapshots:
     transitivePeerDependencies:
       - rollup
       - supports-color
-
-  vite-plugin-static-copy@1.0.6(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2)):
-    dependencies:
-      chokidar: 3.6.0
-      fast-glob: 3.3.2
-      fs-extra: 11.2.0
-      picocolors: 1.0.1
-      vite: 5.3.3(@types/node@20.14.10)(terser@5.31.2)
 
   vite-plugin-vue-inspector@5.1.2(vite@5.3.3(@types/node@20.14.10)(terser@5.31.2)):
     dependencies:

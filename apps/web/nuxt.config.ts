@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'shadcn-nuxt',
     '@nuxtjs/google-fonts',
-    'nuxt-monaco-editor',
     '@nuxt/eslint',
   ],
   app: {
@@ -52,14 +51,6 @@ export default defineNuxtConfig({
     classPrefix: '',
     classSuffix: '',
     storageKey: 'nuxt-color-mode',
-  },
-  monacoEditor: {
-    // These are default values:
-    locale: 'en',
-    componentName: {
-      codeEditor: 'MonacoEditor',
-      diffEditor: 'MonacoDiffEditor',
-    },
   },
   compatibilityDate: '2024-07-10',
 });
