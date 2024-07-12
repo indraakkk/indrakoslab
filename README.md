@@ -1,10 +1,3 @@
-<style>
-img {
-  max-width: 50%;
-  height: auto;
-}
-</style>
-
 # Snapshot
 
 ![Personal Web](docs/ss-page.png)
