@@ -1,19 +1,41 @@
 {
   "name": "indrakoslab",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "node .output/server/index.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@shikijs/monaco": "^3.2.1",
+    "@tanstack/react-router": "^1.166.0",
+    "@tanstack/react-start": "^1.166.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.475.0",
+    "monaco-editor-core": "^0.52.2",
+    "nitro": "3.0.260311-beta",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "shiki": "^3.2.1",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.6",
-    "typescript": "^5.4.5"
+    "@tailwindcss/vite": "^4.1.3",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "tailwindcss": "^4.1.3",
+    "typescript": "^5.8.3",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^4.3.2"
   },
-  "packageManager": "pnpm@8.15.6",
+  "packageManager": "pnpm@9.15.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }
