@@ -13,7 +13,13 @@ export default defineConfig({
     tsConfigPaths(),
     tailwindcss(),
     tanstackStart(),
-    nitro({ preset: "vercel" }),
+    nitro({
+      vercel: {
+        functions: {
+          runtime: "nodejs20.x",
+        },
+      },
+    }),
     react(),
   ],
 });
