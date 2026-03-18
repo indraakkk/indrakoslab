@@ -1,70 +1,55 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, lazy, Suspense } from "react";
-import { PlugZap, Braces } from "lucide-react";
+import { Github, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  NpmInstallTerminal,
+  type NpmInstallTerminalProps,
+} from "@/components/npm-install-terminal";
 
-const EditorMonaco = lazy(() =>
-  import("@/components/editor-monaco").then((m) => ({
-    default: m.EditorMonaco,
-  })),
-);
+const BLOG_URL =
+  import.meta.env.PROD
+    ? "https://indrakoslab-blog.vercel.app"
+    : "http://localhost:3001";
 
-const masterData = {
-  profile: `{
-  "name": "Indra Putra",
-  "github": "indraakkk",
-  "experiences": [
+const profileData: NpmInstallTerminalProps["profile"] = {
+  name: "Indra Putra",
+  github: "indraakkk",
+  experiences: [
     {
-      "company": "A Life By Design",
-      "role": "Software Developer",
-      "startDate": "August 2023",
-      "endDate": "January 2024",
-      "description": "Contributed actively to a 4-day inception meeting, fostering a collaborative environment for ideation in kickstarting an ecommerce ecosystem. Implemented agile methodologies and functioned as a Scrum Master within a team of three developers. Translated designs into highly maintainable and scalable code, maintaining a commitment to thorough local testing. I follow coding best practice and based on code standard"
+      company: "A Life By Design",
+      role: "Software Developer",
+      startDate: "August 2023",
+      endDate: "January 2024",
     },
     {
-      "company": "CPR Vision",
-      "role": "Software Developer",
-      "startDate": "October 2022",
-      "endDate": "August 2023",
-      "description": "Building multiple websites for clients seasonal campaigns to highlight the product's unique selling points and engage with customers."
+      company: "CPR Vision",
+      role: "Software Developer",
+      startDate: "October 2022",
+      endDate: "August 2023",
     },
     {
-      "company": "Others",
-      "role": ["Full-stack Developer", "Backend Developer"],
-      "startDate": "October 2018",
-      "endDate": "September 2022",
-      "description": "Gained experience in diverse projects across various industries and companies. Examples include Chatbot, B2B Marketplace, Logistics, and Payment Gateway development."
-    }
-  ]
-}`,
-  mainStack: `{
-  "lang": ["Javascript", "Typescript"],
+      company: "Others",
+      role: ["Full-stack Developer", "Backend Developer"],
+      startDate: "October 2018",
+      endDate: "September 2022",
+    },
+  ],
+};
+
+const mainStackData: NpmInstallTerminalProps["mainStack"] = {
+  lang: ["Javascript", "Typescript"],
   "meta-framework": "NextJs",
-  "db": ["MySQL", "MariaDB", "PostgreSQL", "SQLite", "MongoDB"],
-  "orm": ["DrizzleORM", "Prisma"],
-  "style": ["TailwindCSS", "CSS"],
-  "server": "ExpressJs",
-  "tooling": ["pnpm", "bunJs", "NodeJs"]
-}`,
-  secondaryStack: `{
-  "lang": "PHP",
+  db: ["MySQL", "MariaDB", "PostgreSQL", "SQLite", "MongoDB"],
+  orm: ["DrizzleORM", "Prisma"],
+  style: ["TailwindCSS", "CSS"],
+  server: "ExpressJs",
+  tooling: ["pnpm", "bunJs", "NodeJs"],
+};
+
+const secondaryStackData: NpmInstallTerminalProps["secondaryStack"] = {
+  lang: "PHP",
   "meta-framework": "Laravel",
-  "server": ["Lumen", "SlimPHP"]
-}`,
-} as const;
-
-const fileNames = [
-  "profile.json",
-  "main-stack.json",
-  "secondary-stack.json",
-] as const;
-
-type TabKey = "profile" | "mainStack" | "secondaryStack";
-
-const tabKeyMap: Record<(typeof fileNames)[number], TabKey> = {
-  "profile.json": "profile",
-  "main-stack.json": "mainStack",
-  "secondary-stack.json": "secondaryStack",
+  server: ["Lumen", "SlimPHP"],
 };
 
 export const Route = createFileRoute("/")({
@@ -72,54 +57,53 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const [selectedTab, setSelectedTab] =
-    useState<(typeof fileNames)[number]>("profile.json");
-  const text = masterData[tabKeyMap[selectedTab]];
+  const scrollToWork = () => {
+    document.getElementById("my-work")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <div className="container mx-auto px-4 md:px-8">
-      <div className="min-h-full flex flex-col md:flex-row items-center justify-center gap-3">
-        <div className="flex flex-col gap-6 w-full md:w-1/2">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-balance">
-            Hi, I am Fullstack Developer
+    <div>
+      {/* Hero Section */}
+      <section className="min-h-[calc(100svh-80px)] flex items-center justify-center px-4 md:px-8">
+        <div className="flex flex-col items-center text-center gap-6 max-w-2xl">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
+            Hey, I'm Indra Putra
           </h1>
-          <span className="text-balance">
-            I'm frontend-leaning software developer with 5 years of experience,
-            have worked for multiple companies based in Singapore. I'm passionate
-            to translate designs into code for web development, ensuring
-            high-quality results withing specific timelines.
-          </span>
-        </div>
-        <div className="flex flex-col w-full md:w-1/2 h-fit rounded-lg border dark:border-white">
-          <div className="w-full flex overflow-x-auto scroll-hidden">
-            {fileNames.map((fn, index) => (
-              <Button
-                key={fn}
-                variant="ghost"
-                className={`flex items-center gap-1 rounded-none ${
-                  fn === selectedTab ? "bg-accent" : ""
-                } ${index === 0 ? "rounded-tl-md" : ""}`}
-                onClick={() => setSelectedTab(fn)}
-              >
-                <Braces className="w-4 h-4" />
-                {fn}
-              </Button>
-            ))}
+          <p className="text-lg md:text-xl text-muted-foreground max-w-lg text-balance">
+            Fullstack Developer based in Singapore with 5+ years of experience
+            building for the web.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 mt-2">
+            <Button size="lg" onClick={scrollToWork}>
+              View My Work
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <a href={BLOG_URL} target="_blank" rel="noopener noreferrer">
+                Read My Blog
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </a>
+            </Button>
           </div>
-          <Suspense
-            fallback={
-              <div className="w-full min-h-[500px] flex items-center justify-center text-muted-foreground">
-                Loading editor...
-              </div>
-            }
+          <a
+            href="https://github.com/indraakkk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors mt-2"
+            aria-label="GitHub profile"
           >
-            <EditorMonaco value={text} className="w-full min-h-[500px]" />
-          </Suspense>
-          <div>
-            <PlugZap className="w-5 h-5 m-1 opacity-50" />
-          </div>
+            <Github className="w-5 h-5" />
+          </a>
         </div>
-      </div>
+      </section>
+
+      {/* Terminal Section */}
+      <section id="my-work" className="py-16 md:py-24 px-4 md:px-8">
+        <NpmInstallTerminal
+          profile={profileData}
+          mainStack={mainStackData}
+          secondaryStack={secondaryStackData}
+        />
+      </section>
     </div>
   );
 }
