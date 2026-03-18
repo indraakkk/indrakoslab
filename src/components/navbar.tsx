@@ -13,10 +13,11 @@ export function Navbar() {
 
   return (
     <header>
-      <div className="flex gap-3 justify-center">
-        <div className="flex items-center border dark:border-white border-black shadow-lg rounded-full px-4 py-2 m-3 gap-3">
-          <p>indrakoslab</p>
-          <span>|</span>
+      {/* Desktop: top center | Mobile: fixed bottom center */}
+      <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center md:static md:bottom-auto md:mt-0">
+        <div className="flex items-center border dark:border-white border-black shadow-lg rounded-full px-4 py-2 m-3 gap-3 bg-background/80 backdrop-blur-sm">
+          <p className="font-medium">indrakoslab</p>
+          <span className="text-muted-foreground">|</span>
           <nav>
             <ul className="flex flex-row gap-6">
               <li>
@@ -29,7 +30,7 @@ export function Navbar() {
               </li>
             </ul>
           </nav>
-          <span>|</span>
+          <span className="text-muted-foreground">|</span>
           <Button
             variant="ghost"
             size="icon"

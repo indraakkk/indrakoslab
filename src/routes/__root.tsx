@@ -4,7 +4,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { Heart } from "lucide-react";
+import { Heart, Github } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getTheme } from "@/lib/theme";
@@ -54,10 +54,21 @@ function RootComponent() {
       <main>
         <Outlet />
       </main>
-      <footer className="flex justify-center py-10">
-        <span className="flex items-center">
-          Made with <Heart className="w-4 h-4 mx-3" /> from SUB
+      <footer className="flex flex-col items-center gap-3 py-10 pb-24 md:pb-10">
+        <span className="flex items-center text-sm text-muted-foreground">
+          Made with <Heart className="w-4 h-4 mx-2" /> from SUB
         </span>
+        <div className="flex gap-4">
+          <a
+            href="https://github.com/indraakkk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="GitHub"
+          >
+            <Github className="w-4 h-4" />
+          </a>
+        </div>
       </footer>
     </div>
   );
