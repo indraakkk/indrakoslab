@@ -64,8 +64,12 @@ function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="min-h-[calc(100svh-80px)] flex items-center justify-center px-4 md:px-8">
-        <div className="flex flex-col items-center text-center gap-6 max-w-2xl">
+      <section className="relative overflow-hidden min-h-[calc(100svh-80px)] flex items-center justify-center px-4 md:px-8">
+        {/* Background layers */}
+        <div className="hero-grid absolute inset-0 pointer-events-none" aria-hidden="true" />
+        <div className="hero-glow absolute inset-0 pointer-events-none" aria-hidden="true" />
+
+        <div className="relative z-10 flex flex-col items-center text-center gap-6 max-w-2xl">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
             Hey, I'm Indra Putra
           </h1>
