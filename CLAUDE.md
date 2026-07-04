@@ -14,6 +14,12 @@ Personal site of Indra Putra (`indrakoslab_`), implementing a Claude Design
 handoff. TanStack Start (React SSR + file routes), all routes prerendered at
 build, deployed as one Cloudflare Worker.
 
+## Toolchain
+
+Needs Node ≥ 22.15 (`@cloudflare/vite-plugin` → `node:module.registerHooks`) +
+bun. `flake.nix` pins both — `nix develop` (or `direnv allow` via `.envrc`).
+System Node 20 and bun's runtime both lack `registerHooks` and will fail the build.
+
 ## Commands
 
 ```sh

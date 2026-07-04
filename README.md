@@ -17,6 +17,18 @@ Status: [Execution Plan](docs/EXECUTION-PLAN.md)
 - Canvas glass hero — `src/components/hero-canvas.tsx`, ported from the design
   prototype
 
+## Toolchain
+
+Needs **Node ≥ 22.15** (`@cloudflare/vite-plugin` uses `node:module.registerHooks`)
+and **bun**. A Nix flake pins both:
+
+```sh
+nix develop            # drops you into a shell with node 22 + bun
+# or, with direnv: `direnv allow` once, then it auto-loads on cd
+```
+
+No Nix? Use any Node 22+ (`nvm install 22` / `brew install node@22`) plus bun.
+
 ## Commands
 
 ```sh
