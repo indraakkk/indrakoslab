@@ -1,0 +1,242 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens — extracted from the Claude Design handoff
+ * (design/project/Indrakoslab Hero.dc.html and siblings).
+ * Bright/white site, ink text, teal accent, Geist + Instrument Serif.
+ */
+
+:root {
+  /* palette */
+  --ink: #14171c; /* primary text, dark pills */
+  --ink-2: #1a1e26; /* serif italic accents */
+  --ink-soft: #3c4350; /* nav links, post body */
+  --slate: #545d6b; /* body copy */
+  --slate-2: #5c6675; /* chip text */
+  /* kickers, muted meta — darkened from the design's #7a8494 to pass
+     WCAG AA (4.98:1 on white, 4.60:1 on mist) */
+  --faint: #68707f;
+  --mist: #f4f6f9; /* hero / band backgrounds */
+  --teal: #0f9d8c; /* accent */
+  --avail: #2fac66; /* availability dot */
+
+  /* shadcn/ui semantic tokens, mapped onto the design palette */
+  --background: #ffffff;
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: #ffffff;
+  --secondary: rgba(20, 23, 28, 0.05);
+  --secondary-foreground: var(--slate-2);
+  --muted: var(--mist);
+  --muted-foreground: var(--faint);
+  --accent: var(--mist);
+  --accent-foreground: var(--ink);
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(20, 23, 28, 0.1);
+  --input: rgba(20, 23, 28, 0.12);
+  --ring: var(--teal);
+  --radius: 0.75rem;
+}
+
+@theme inline {
+  --font-sans:
+    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-soft: var(--ink-soft);
+  --color-slate: var(--slate);
+  --color-slate-2: var(--slate-2);
+  --color-faint: var(--faint);
+  --color-mist: var(--mist);
+  --color-teal: var(--teal);
+  --color-avail: var(--avail);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  ::selection {
+    background: rgba(15, 157, 140, 0.18);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * Flute texture — the diagonal glass-ridge echo used across the site.
+ * 80deg gradient direction = stripes tilted ~-10° from vertical, matching
+ * the hero canvas' -10° blade angle.
+ */
+@utility flutes-fine {
+  background-image: repeating-linear-gradient(
+    80deg,
+    rgba(20, 23, 28, 0.05) 0 1.5px,
+    rgba(255, 255, 255, 0) 1.5px 34px
+  );
+}
+
+@utility flutes-wide {
+  background-image: repeating-linear-gradient(
+    80deg,
+    rgba(20, 23, 28, 0.04) 0 1.5px,
+    rgba(255, 255, 255, 0) 1.5px 68px
+  );
+}
+
+/*
+ * Blog post body — styles for the HTML `marked` produces from
+ * content/blog/*.md. Mirrors the detail view in design/project/Blog.dc.html:
+ * relaxed paragraphs, centered Instrument Serif pull-quotes.
+ */
+@layer components {
+  .post-body {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .post-body p {
+    margin: 0;
+    font-size: 17.5px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+  }
+
+  .post-body a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: rgba(15, 157, 140, 0.5);
+    text-underline-offset: 3px;
+  }
+
+  .post-body a:hover {
+    text-decoration-color: var(--teal);
+  }
+
+  .post-body strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .post-body blockquote {
+    margin: 18px 0;
+    padding: 0 clamp(0px, 4vw, 40px);
+    text-align: center;
+    border: none;
+  }
+
+  .post-body blockquote p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .post-body blockquote p::before {
+    content: '\201C';
+  }
+
+  .post-body blockquote p::after {
+    content: '\201D';
+  }
+
+  .post-body ul,
+  .post-body ol {
+    margin: 0;
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .post-body h2 {
+    margin: 18px 0 0;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .post-body h3 {
+    margin: 12px 0 0;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  .post-body code {
+    font-size: 0.92em;
+    background: rgba(20, 23, 28, 0.05);
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+
+  .post-body pre {
+    margin: 0;
+    padding: 20px 24px;
+    background: var(--mist);
+    border: 1px solid rgba(20, 23, 28, 0.08);
+    border-radius: 16px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .post-body pre code {
+    background: none;
+    padding: 0;
+  }
+
+  .post-body hr {
+    border: none;
+    height: 1px;
+    background: rgba(20, 23, 28, 0.08);
+    margin: 20px 0;
+  }
+}

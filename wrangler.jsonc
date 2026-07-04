@@ -1,0 +1,29 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "indr-web",
+	"compatibility_date": "2025-09-02",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"main": "@tanstack/react-start/server-entry",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	/**
+	 * Prerendered pages live at about/index.html etc.; serve /about directly
+	 * (200) and 307 /about/ -> /about so canonicals + sitemap match reality.
+	 */
+	"assets": {
+		"html_handling": "drop-trailing-slash"
+	},
+	/**
+	 * Phase 4 (cutover): uncomment to attach the custom domain, then deploy.
+	 * DNS for indr.web.id is already on Cloudflare, so this is one deploy.
+	 */
+	// "routes": [{ "pattern": "indr.web.id", "custom_domain": true }]
+}

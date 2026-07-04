@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://indr.web.id/sitemap.xml
