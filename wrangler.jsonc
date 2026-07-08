@@ -22,8 +22,12 @@
 		"html_handling": "drop-trailing-slash"
 	},
 	/**
-	 * Phase 4 (cutover): uncomment to attach the custom domain, then deploy.
+	 * Custom domain (cutover): uncomment to attach indr.web.id, then deploy.
 	 * DNS for indr.web.id is already on Cloudflare, so this is one deploy.
+	 * Full runbook (incl. Vercel → CF redirect): docs/DOMAIN-SETUP.md
 	 */
-	// "routes": [{ "pattern": "indr.web.id", "custom_domain": true }]
+	// "routes": [
+	// 	{ "pattern": "indr.web.id", "custom_domain": true }
+	// 	// { "pattern": "www.indr.web.id", "custom_domain": true }
+	// ]
 }

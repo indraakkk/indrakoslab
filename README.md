@@ -23,7 +23,7 @@ Needs **Node ≥ 22.15** (`@cloudflare/vite-plugin` uses `node:module.registerHo
 and **bun**. A Nix flake pins both:
 
 ```sh
-nix develop            # drops you into a shell with node 22 + bun
+nix develop            # drops you into a shell with node 22 + bun + wrangler
 # or, with direnv: `direnv allow` once, then it auto-loads on cd
 ```
 
@@ -56,24 +56,20 @@ Body in markdown. `> blockquotes` render as centered serif pull-quotes.
 
 The filename becomes the slug (`/blog/my-post`). Reading time is computed.
 
-## Content TODOs before cutover
+## Content status
 
-All marked `TODO` in the source, concentrated in `src/lib/site.ts`:
+Copy is sourced from the résumé (title, location, experience, stack, and the
+JobForge / Pathfinder / Tiles by Tiles / Trailmark project cards with live
+links). Still open:
 
-- Real project one-liners, stacks, links + screenshots in `/public`
-- Real experience periods/roles (Arrow, BetterOS, Quark Spark, ALBD)
-- LinkedIn URL (currently a placeholder)
-- Availability badge text / location in `src/components/hero.tsx`
-- Replace the 4 placeholder posts in `content/blog/`
-- Optional: `public/portrait.jpg` for the About page, `public/CV.pdf`
+- A real one-line description for **Trailmark** (`src/lib/site.ts`)
+- Project screenshots in `/public` (cards fall back to a styled wordmark)
+- Optional `public/portrait.jpg` (About) and `public/CV.pdf`
+- The blog is **hidden** (`SHOW_BLOG` in `src/lib/site.ts`); the 4 placeholder
+  posts in `content/blog/` are unused until it's re-enabled
 
-## Cutover runbook (Phase 4, needs your accounts)
+## Cutover runbook (needs your Cloudflare/Vercel accounts)
 
-1. `wrangler login` → `bun run deploy` → verify on `*.workers.dev`
-2. Uncomment `routes` in `wrangler.jsonc` → deploy → `indr.web.id` live
-3. Cloudflare dash: connect repo to **Workers Builds** (auto-deploy on push)
-4. Vercel: 301 both old projects to `https://indr.web.id`
-   (map old blog paths → `/blog/...`)
-5. Search Console: verify `indr.web.id`, submit `https://indr.web.id/sitemap.xml`
-6. Update CV / LinkedIn / GitHub profile links; delete Vercel projects after
-   ~2 weeks of clean redirects
+Attaching `indr.web.id` and redirecting the old Vercel site off it →
+**[docs/DOMAIN-SETUP.md](docs/DOMAIN-SETUP.md)**. Phased status:
+[docs/EXECUTION-PLAN.md](docs/EXECUTION-PLAN.md).
