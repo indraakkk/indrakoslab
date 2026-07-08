@@ -25,9 +25,17 @@
             pkgs.git
           ];
 
+          # The repo-pinned CLIs (wrangler, vite, …) go on PATH via the
+          # shellHook, so `wrangler ...` works bare in the shell — the exact
+          # version `bun run deploy` uses (node_modules), no version skew.
+          # We deliberately avoid nixpkgs' `wrangler`: its `workerd` dependency
+          # has no aarch64-darwin binary cache and fails to build from source,
+          # which would break `nix develop` on Apple Silicon.
           shellHook = ''
+            export PATH="$PWD/node_modules/.bin:$PATH"
             echo "indrakoslab devshell → node $(node -v) · bun $(bun -v)"
-            echo "  bun install && bun run dev"
+            echo "  wrangler → repo-pinned in node_modules/.bin (run 'bun install' first)"
+            echo "  bun install && bun run dev   ·   bun run deploy"
           '';
         };
       }
