@@ -6,14 +6,14 @@ import { Kicker, SerifEm } from '@/components/type'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { seo } from '@/lib/seo'
-import { EXPERIENCE, SITE } from '@/lib/site'
+import { EXPERIENCE, SHOW_BLOG, SITE } from '@/lib/site'
 
 export const Route = createFileRoute('/about')({
   head: () => ({
     ...seo({
       title: `About — ${SITE.author}`,
       description:
-        "I'm Indra Putra — a fullstack developer based in Singapore. For the past five-plus years I've built web products end to end: the interface people touch, the API behind it, and the infrastructure underneath.",
+        "I'm Indra Putra — a senior fullstack engineer based in Indonesia. For the past seven-plus years I've built web products end to end: the interface people touch, the API behind it, and the infrastructure underneath.",
       path: '/about',
     }),
   }),
@@ -57,12 +57,11 @@ function AboutPage() {
               <h1 className="mt-[18px] text-[clamp(40px,5vw,64px)] font-medium leading-[1.08] tracking-[-0.035em] text-ink">
                 Engineer from front <SerifEm>to back.</SerifEm>
               </h1>
-              {/* TODO: confirm location — design says Singapore */}
               <p className="mt-7 text-[17px] leading-[1.7] text-slate">
-                I'm Indra Putra — a fullstack developer based in Singapore. For
-                the past five-plus years I've built web products end to end: the
-                interface people touch, the API behind it, and the
-                infrastructure underneath.
+                I'm Indra Putra — a senior fullstack engineer based in
+                Indonesia. For the past seven-plus years I've built web products
+                end to end: the interface people touch, the API behind it, and
+                the infrastructure underneath.
               </p>
               <p className="mt-[18px] text-[17px] leading-[1.7] text-slate">
                 I care about the whole arc of shipping — understanding the
@@ -162,7 +161,13 @@ function AboutPage() {
                 </Link>
               </Button>
               <Button asChild variant="glass-pill" size="pill">
-                <Link to="/blog">Read the blog</Link>
+                {SHOW_BLOG ? (
+                  <Link to="/blog">Read the blog</Link>
+                ) : (
+                  <Link to="/" hash="work">
+                    View my work
+                  </Link>
+                )}
               </Button>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { HeroCanvas } from '@/components/hero-canvas'
 import { SiteNav } from '@/components/site-nav'
 import { Button } from '@/components/ui/button'
 import { SerifEm } from '@/components/type'
+import { SHOW_BLOG } from '@/lib/site'
 
 /**
  * The 100vh hero from the design handoff: interactive glass canvas,
@@ -26,7 +27,7 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center">
         <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[rgba(20,23,28,0.10)] bg-white/55 px-4 py-[7px] text-[13px] font-medium text-ink-soft backdrop-blur-[10px]">
           <span className="size-[7px] rounded-full bg-avail" aria-hidden />
-          Fullstack Developer · Singapore
+          Senior Fullstack Engineer · Indonesia
         </div>
 
         <h1 className="mt-[26px] text-[clamp(44px,6.6vw,86px)] font-medium leading-[1.06] tracking-[-0.035em] text-ink">
@@ -36,8 +37,8 @@ export function Hero() {
         </h1>
 
         <p className="mt-[26px] max-w-[520px] text-[17px] leading-[1.65] text-slate">
-          5+ years of experience shipping products end to end — from clean
-          interfaces to the systems behind them.
+          7+ years shipping products end to end — from clean interfaces to the
+          systems behind them.
         </p>
 
         <div className="pointer-events-auto mt-[38px] flex flex-wrap items-center justify-center gap-3.5">
@@ -46,14 +47,27 @@ export function Hero() {
               View My Work <span aria-hidden="true">→</span>
             </Link>
           </Button>
-          <Button
-            asChild
-            variant="glass-pill"
-            size="pill"
-            className="bg-white/50 hover:bg-white/80"
-          >
-            <Link to="/blog">Read My Blog</Link>
-          </Button>
+          {SHOW_BLOG ? (
+            <Button
+              asChild
+              variant="glass-pill"
+              size="pill"
+              className="bg-white/50 hover:bg-white/80"
+            >
+              <Link to="/blog">Read My Blog</Link>
+            </Button>
+          ) : (
+            <Button
+              asChild
+              variant="glass-pill"
+              size="pill"
+              className="bg-white/50 hover:bg-white/80"
+            >
+              <Link to="/" hash="contact">
+                Get in touch
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
 

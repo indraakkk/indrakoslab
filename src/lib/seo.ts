@@ -45,8 +45,9 @@ export function personJsonLd() {
     name: SITE.author,
     url: SITE.url,
     email: `mailto:${SITE.email}`,
-    jobTitle: 'Fullstack Developer',
-    sameAs: [SITE.github],
+    jobTitle: 'Senior Fullstack Engineer',
+    address: { '@type': 'PostalAddress', addressCountry: 'ID' },
+    sameAs: [SITE.github, SITE.linkedin],
   })
 }
 
