@@ -6,9 +6,13 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { fetchPost } from '@/lib/blog'
 import { blogPostingJsonLd, seo } from '@/lib/seo'
-import { SITE } from '@/lib/site'
+import { SHOW_BLOG, SITE } from '@/lib/site'
 
 export const Route = createFileRoute('/blog/$slug')({
+  // Blog is hidden for now (SHOW_BLOG in src/lib/site.ts) — 404 direct hits.
+  beforeLoad: () => {
+    if (!SHOW_BLOG) throw notFound()
+  },
   loader: async ({ params }) => {
     const post = await fetchPost({ data: params.slug })
     if (!post) throw notFound()

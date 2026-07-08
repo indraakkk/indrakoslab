@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { Menu, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { SITE } from '@/lib/site'
+import { SHOW_BLOG, SITE } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 export interface SiteNavProps {
@@ -16,13 +16,18 @@ export interface SiteNavProps {
   active?: 'about' | 'blog'
 }
 
-const LINKS = [
+const ALL_LINKS = [
   { label: 'Work', to: '/', hash: 'work' },
   { label: 'Stack', to: '/', hash: 'stack' },
   { label: 'About', to: '/about', key: 'about' },
   { label: 'Blog', to: '/blog', key: 'blog' },
   { label: 'Contact', to: '/', hash: 'contact' },
 ] as const
+
+// Blog is gated behind SHOW_BLOG (src/lib/site.ts) — drop the link when off.
+const LINKS = ALL_LINKS.filter(
+  (l) => SHOW_BLOG || !('key' in l && l.key === 'blog'),
+)
 
 export function SiteNav({ variant = 'solid', active }: SiteNavProps) {
   const [open, setOpen] = useState(false)

@@ -7,6 +7,14 @@
 // normalizes trailing slashes (root excepted), and dedupes.
 import { readFileSync, writeFileSync } from 'node:fs'
 
+// Mirror the blog feature flag in src/lib/site.ts (without importing TS): while
+// the blog is hidden its routes 404, so its URLs must not appear in the sitemap.
+// The Start sitemap generator emits static routes from the route tree
+// regardless of prerender, so /blog leaks in otherwise.
+const SHOW_BLOG = /export const SHOW_BLOG\s*=\s*true\b/.test(
+  readFileSync('src/lib/site.ts', 'utf8'),
+)
+
 const path = 'dist/client/sitemap.xml'
 const xml = readFileSync(path, 'utf8')
 
@@ -20,6 +28,8 @@ for (const block of blocks) {
   const loc = m[1]
   const url = new URL(loc)
   if (url.hash) continue
+  // Drop /blog (+ /blog/*) while the blog is hidden — those routes 404.
+  if (!SHOW_BLOG && /^\/blog(\/|$)/.test(url.pathname)) continue
   let normalized = loc
   if (url.pathname !== '/' && url.pathname.endsWith('/')) {
     url.pathname = url.pathname.replace(/\/+$/, '')

@@ -12,11 +12,11 @@ import { Card } from '@/components/ui/card'
 import { fetchPosts } from '@/lib/blog'
 import type { PostMeta } from '@/lib/content'
 import { personJsonLd, seo } from '@/lib/seo'
-import { EXPERIENCE, PROJECTS, SITE, STACK, type Project } from '@/lib/site'
+import { EXPERIENCE, PROJECTS, SHOW_BLOG, SITE, STACK, type Project } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/')({
-  loader: () => fetchPosts(),
+  loader: () => (SHOW_BLOG ? fetchPosts() : []),
   head: () => {
     const { meta, links } = seo({
       title: SITE.title,
@@ -42,7 +42,7 @@ function HomePage() {
         <WorkSection />
         <StackSection />
         <ExperienceSection />
-        <WritingSection posts={posts.slice(0, 3)} />
+        {SHOW_BLOG ? <WritingSection posts={posts.slice(0, 3)} /> : null}
         <ContactSection />
       </main>
       <SiteFooter />
@@ -154,7 +154,7 @@ function WorkSection() {
               <p className="text-[15.5px] leading-[1.68] text-slate">
                 {featured.description}
               </p>
-              <ProjectLink href={featured.href} />
+              {featured.href ? <ProjectLink href={featured.href} /> : null}
             </div>
           </Card>
 
@@ -175,7 +175,7 @@ function WorkSection() {
                 <p className="text-[15px] leading-[1.65] text-slate">
                   {p.description}
                 </p>
-                <ProjectLink href={p.href} />
+                {p.href ? <ProjectLink href={p.href} /> : null}
               </div>
             </Card>
           ))}
@@ -319,7 +319,7 @@ function ContactSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_50%,rgba(244,246,249,0.9)_0%,rgba(244,246,249,0.4)_55%,rgba(244,246,249,0)_100%)]" />
 
       <div className="relative mx-auto flex max-w-[760px] flex-col items-center text-center">
-        <Kicker>05 · Contact</Kicker>
+        <Kicker>{SHOW_BLOG ? '05' : '04'} · Contact</Kicker>
         <h2 className="mt-[18px] text-[clamp(38px,5.4vw,68px)] font-medium leading-[1.06] tracking-[-0.035em] text-ink">
           Have something in mind?
           <br />

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 
 import { PostRow } from '@/components/post-row'
 import { SiteFooter } from '@/components/site-footer'
@@ -6,9 +6,13 @@ import { SiteNav } from '@/components/site-nav'
 import { Kicker, SerifEm } from '@/components/type'
 import { fetchPosts } from '@/lib/blog'
 import { seo } from '@/lib/seo'
-import { SITE } from '@/lib/site'
+import { SHOW_BLOG, SITE } from '@/lib/site'
 
 export const Route = createFileRoute('/blog/')({
+  // Blog is hidden for now (SHOW_BLOG in src/lib/site.ts) — 404 direct hits.
+  beforeLoad: () => {
+    if (!SHOW_BLOG) throw notFound()
+  },
   loader: () => fetchPosts(),
   head: () => ({
     ...seo({
