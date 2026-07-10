@@ -1,4 +1,11 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { createPortal as createDomPortal } from 'react-dom'
 import {
   Canvas,
@@ -6,7 +13,11 @@ import {
   useFrame,
   useThree,
 } from '@react-three/fiber'
-import { MeshTransmissionMaterial, useFBO } from '@react-three/drei'
+import {
+  MeshTransmissionMaterial,
+  PerformanceMonitor,
+  useFBO,
+} from '@react-three/drei'
 import * as THREE from 'three'
 
 import type { CSSProperties } from 'react'
@@ -222,6 +233,30 @@ const NB = BLADES.length
 
 const CAM_Z = 20
 const GLASS_Z = 4
+
+/**
+ * Adaptive-quality ladder, driven by measured fps (drei's PerformanceMonitor)
+ * rather than device/GPU sniffing — see hero-scene perf notes. Tier 0 is the
+ * authored default (identical to the pre-adaptive look); each step down backs
+ * off the least-visible knob first (dpr max), then buffer resolution, and
+ * only caps MTM `samples` as a last resort, since that's the one most likely
+ * to show (fewer transmission samples over a long smear reads as banding).
+ * `samplesCap` is combined with the tune panel's `cfg.samples` via `Math.min`,
+ * so it can only ever reduce quality below what's configured, never raise it.
+ */
+const QUALITY_TIERS: Array<{
+  dpr: [number, number]
+  bufferScale: number
+  samplesCap: number
+}> = [
+  { dpr: [1, 1.5], bufferScale: 1, samplesCap: 32 },
+  { dpr: [1, 1.25], bufferScale: 1, samplesCap: 32 },
+  { dpr: [1, 1], bufferScale: 1, samplesCap: 32 },
+  { dpr: [1, 1], bufferScale: 0.85, samplesCap: 32 },
+  { dpr: [1, 1], bufferScale: 0.7, samplesCap: 32 },
+  { dpr: [1, 1], bufferScale: 0.7, samplesCap: 12 },
+  { dpr: [1, 1], bufferScale: 0.7, samplesCap: 8 },
+]
 
 /** Design-space (raw sRGB) color helpers — no THREE color management. */
 function hexToRgb(hex: string): [number, number, number] {
@@ -729,15 +764,26 @@ function useStudioEnvironment(blur: number, level: number) {
     strip(12, 1.4, '#ffffff', 7 * level, 0, 6, 4) // key strip, overhead-front
     strip(2, 9, '#dfe7f2', 2.2 * level, -7, 1, 2) // cool left fill
     strip(1.6, 8, '#cdeee6', 1.8 * level, 7, -2, 2) // teal-tinted right kicker
-    const rt = pmrem.fromScene(env, blur)
-    scene.environment = rt.texture
+
+    // fromScene() is a synchronous, comparatively expensive GPU call (prefilter
+    // convolution across a mip chain, plus a one-time shader compile) — cost
+    // varies a lot by GPU/shader-cache warmth (single-digit ms warm, well over
+    // 100ms observed cold). Deferred a frame past mount so it never stacks
+    // onto the same task as the geometry build; the glass simply renders
+    // without env reflections for that one frame, invisible under the 500ms fade.
+    let rt: ReturnType<typeof pmrem.fromScene> | null = null
+    const raf = requestAnimationFrame(() => {
+      rt = pmrem.fromScene(env, blur)
+      scene.environment = rt.texture
+    })
     return () => {
+      cancelAnimationFrame(raf)
       scene.environment = null
       for (const m of meshes) {
         m.geometry.dispose()
         m.material.dispose()
       }
-      rt.dispose()
+      rt?.dispose()
       pmrem.dispose()
     }
   }, [gl, scene, blur, level])
@@ -747,13 +793,28 @@ function useStudioEnvironment(blur: number, level: number) {
 // Scene wiring
 // ---------------------------------------------------------------------------
 
+/** Trailing debounce — settles a fast-changing value (e.g. live resize) so
+ *  expensive downstream work (the flute geometry rebuild) only runs once
+ *  after things stop changing, instead of on every intermediate value. */
+function useDebounced<T>(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const id = window.setTimeout(() => setDebounced(value), delay)
+    return () => window.clearTimeout(id)
+  }, [value, delay])
+  return debounced
+}
+
 interface SceneProps {
   cfg: HeroConfig
   /** Render a single static t=0 frame instead of animating. */
   reduced: boolean
+  /** Adaptive-quality knobs — see QUALITY_TIERS. */
+  bufferScale: number
+  samplesCap: number
 }
 
-function Scene({ cfg, reduced }: SceneProps) {
+function Scene({ cfg, reduced, bufferScale, samplesCap }: SceneProps) {
   const gl = useThree((s) => s.gl)
   const size = useThree((s) => s.size)
   const viewport = useThree((s) => s.viewport)
@@ -763,8 +824,13 @@ function Scene({ cfg, reduced }: SceneProps) {
   // — CSS resolution, not device resolution (¼ the pixels at dpr 2): the
   // frost smear hides the upscale inside the glass, the page outside is long
   // soft gradients (the grain dither just softens a touch at dpr > 1), and
-  // the 33-blade fragment loop runs on far fewer pixels
-  const buffer = useFBO(size.width, size.height, {
+  // the 33-blade fragment loop runs on far fewer pixels. `bufferScale` (the
+  // adaptive-quality ladder) can shrink this further under measured pressure
+  // — the shader already parameterizes off the buffer's own pixel dimensions
+  // (not the CSS size), so a smaller buffer just works, bilinearly upsampled.
+  const bufW = Math.max(2, Math.round(size.width * bufferScale))
+  const bufH = Math.max(2, Math.round(size.height * bufferScale))
+  const buffer = useFBO(bufW, bufH, {
     type: THREE.UnsignedByteType,
     depthBuffer: false,
   })
@@ -850,11 +916,16 @@ function Scene({ cfg, reduced }: SceneProps) {
   )
   // deferred: slider drags and live resizes re-render at input priority with
   // the previous geometry, and the rebuild runs in a low-priority pass —
-  // React skips intermediate values when rebuilds can't keep up with events
+  // React skips intermediate values when rebuilds can't keep up with events.
+  // Debounced on top: a continuous drag-resize (or a burst of slider input)
+  // changes geoParams on every intermediate frame, and each one is a
+  // candidate for the ~160k-vertex rebuild below — settle for 180ms before
+  // actually rebuilding, so dragging a window edge doesn't fire it repeatedly.
   const deferredGeo = useDeferredValue(geoParams)
+  const settledGeo = useDebounced(deferredGeo, 180)
   const geometry = useMemo(
-    () => buildFlutedGlassGeometry(deferredGeo),
-    [deferredGeo],
+    () => buildFlutedGlassGeometry(settledGeo),
+    [settledGeo],
   )
   useEffect(() => () => geometry.dispose(), [geometry])
 
@@ -1032,7 +1103,7 @@ function Scene({ cfg, reduced }: SceneProps) {
             clearcoatRoughness={cfg.clearcoatRoughness}
             distortion={cfg.distortion}
             distortionScale={cfg.distortionScale}
-            samples={Math.round(cfg.samples)}
+            samples={Math.min(Math.round(cfg.samples), samplesCap)}
             resolution={64} // shrinks MTM's unused internal FBOs (we pass `buffer`)
             envMapIntensity={cfg.envMapIntensity}
             color="#ffffff"
@@ -1325,12 +1396,68 @@ export default function HeroScene({
   // tune panel: dev only — never shipped in production builds
   const tune = import.meta.env.DEV
 
-  // frameloop is driven declaratively through the Canvas prop — R3F's
-  // configure() re-asserts the prop on every commit, so an imperative
-  // setFrameloop() override would be stomped by any re-render. 'demand'
-  // (not 'never') is the paused mode: invalidate() is a no-op under
-  // 'never', and the static frame must still be able to render.
-  const frameloop = reduced || !visible ? 'demand' : 'always'
+  // adaptive-quality ladder: tier 0 (index 0) is the authored default and
+  // matches today's look exactly; PerformanceMonitor (rendered inside the
+  // Canvas below) steps this up/down from measured fps only — no device or
+  // GPU sniffing, which is unreliable/blocked cross-browser (see perf notes).
+  const [qualityTier, setQualityTier] = useState(0)
+  const stepDown = useCallback(
+    () => setQualityTier((t) => Math.min(QUALITY_TIERS.length - 1, t + 1)),
+    [],
+  )
+  const stepUp = useCallback(
+    () => setQualityTier((t) => Math.max(0, t - 1)),
+    [],
+  )
+  const dropToFloor = useCallback(
+    () => setQualityTier(QUALITY_TIERS.length - 1),
+    [],
+  )
+  const quality = QUALITY_TIERS[qualityTier]
+
+  // Canvas always runs in 'demand' mode — we drive every repaint ourselves
+  // via invalidate() rather than letting R3F render on every display refresh.
+  // Active animation below self-throttles to ~60fps; the paused (reduced
+  // motion / off-screen) effect further down does a one-shot invalidate().
+  const paused = reduced || !visible
+
+  // R3F renders once per invalidate() call, so the render rate is exactly
+  // however often we invalidate — cap that at ~60fps regardless of the
+  // display's actual refresh rate (up to 120Hz on ProMotion iPhones/iPads
+  // and some Android devices), which roughly halves GPU submission cost
+  // there with no visual difference: the scene's motion is time-based
+  // (via `delta`, not frame count), so it looks identical at any render
+  // rate ≥ its own drift speed.
+  //
+  // Uses a carry-over accumulator, not a "reset to now" threshold check:
+  // snapping `last = now` on every accepted tick discards whatever time had
+  // accumulated past the threshold, which *quantizes* the achieved rate to
+  // nativeRate / ceil(targetInterval / nativeInterval) — e.g. on a 75Hz
+  // display that works out to 37.5fps, not 60, because 75Hz's ~13.3ms native
+  // interval doesn't divide evenly into a 16.67ms target. Carrying the
+  // remainder forward (only ever subtracting exactly one target interval)
+  // converges the long-run average to the true target rate instead.
+  useEffect(() => {
+    if (!ready || paused) return
+    stateRef.current?.invalidate() // first frame renders immediately
+    let raf = 0
+    let acc = 0
+    let prev = -1
+    const FRAME_MS = 1000 / 60
+    const tick = (now: number) => {
+      if (prev >= 0) {
+        acc += now - prev
+        if (acc >= FRAME_MS) {
+          acc %= FRAME_MS
+          stateRef.current?.invalidate()
+        }
+      }
+      prev = now
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [ready, paused])
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -1355,21 +1482,22 @@ export default function HeroScene({
   // paused mode never repaints on its own — render one fresh static frame
   // on entry (and on resize) so the hero never sits stale or blank
   useEffect(() => {
-    if (!ready || frameloop !== 'demand') return
+    if (!ready || !paused) return
     stateRef.current?.invalidate()
     const onResize = () => stateRef.current?.invalidate()
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [ready, frameloop])
+  }, [ready, paused])
 
   return (
     <>
       <Canvas
         ref={canvasRef}
-        // capped at 1.5: the full-viewport transmission pass is fill-bound and
-        // the frosted-glass look doesn't reward retina-exact sampling
-        dpr={[1, 1.5]}
-        frameloop={frameloop}
+        // capped at 1.5 by default: the full-viewport transmission pass is
+        // fill-bound and the frosted-glass look doesn't reward retina-exact
+        // sampling. The adaptive-quality ladder can lower this cap further.
+        dpr={quality.dpr}
+        frameloop="demand"
         camera={{ position: [0, 0, CAM_Z], fov: 15 }}
         // raw design-space colors end to end: no tone mapping, no sRGB re-encode
         linear
@@ -1392,7 +1520,18 @@ export default function HeroScene({
           transition: 'opacity 500ms ease',
         }}
       >
-        <Scene cfg={cfg} reduced={reduced} />
+        <PerformanceMonitor
+          flipflops={3}
+          onDecline={stepDown}
+          onIncline={stepUp}
+          onFallback={dropToFloor}
+        />
+        <Scene
+          cfg={cfg}
+          reduced={reduced}
+          bufferScale={quality.bufferScale}
+          samplesCap={quality.samplesCap}
+        />
       </Canvas>
       {tune && (
         <TunePanel cfg={cfg} onChange={setCfg} onReset={() => setCfg(defaults)} />
