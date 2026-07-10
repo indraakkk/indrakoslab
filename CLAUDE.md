@@ -103,3 +103,18 @@ the Nix devshell for ad-hoc commands. Custom domain (`indr.web.id`) is a
 commented `routes` block in `wrangler.jsonc`; the full cutover runbook —
 attaching the domain and 301-redirecting the old Vercel site — is in
 `docs/DOMAIN-SETUP.md`. Phased status: `docs/EXECUTION-PLAN.md`.
+
+## Advisor usage (Sonnet 5 executor / Fable 5 advisor)
+
+Consult the advisor before committing to an approach on anything
+touching more than one file, and once more before declaring a task
+done. If the same failure recurs, stop and consult instead of trying
+a third variation solo.
+
+Treat its guidance as a senior review, not a rubber stamp — if a test
+fails after following it, or file contents contradict a specific
+claim, surface that and ask again rather than quietly picking a side.
+
+## NO CO-AUTHOR
+
+Repo should clean from co-author commit. I paying this service I no longer advertise⏎
