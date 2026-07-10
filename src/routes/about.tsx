@@ -1,42 +1,42 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from "@tanstack/react-router";
 
-import { SiteFooter } from '@/components/site-footer'
-import { SiteNav } from '@/components/site-nav'
-import { Kicker, SerifEm } from '@/components/type'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { seo } from '@/lib/seo'
-import { EXPERIENCE, SHOW_BLOG, SITE } from '@/lib/site'
+import { SiteFooter } from "@/components/site-footer";
+import { SiteNav } from "@/components/site-nav";
+import { Kicker, SerifEm } from "@/components/type";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { seo } from "@/lib/seo";
+import { EXPERIENCE, SHOW_BLOG, SITE } from "@/lib/site";
 
-export const Route = createFileRoute('/about')({
+export const Route = createFileRoute("/about")({
   head: () => ({
     ...seo({
       title: `About — ${SITE.author}`,
       description:
         "I'm Indra Putra — a senior fullstack engineer based in Indonesia. For the past seven-plus years I've built web products end to end: the interface people touch, the API behind it, and the infrastructure underneath.",
-      path: '/about',
+      path: "/about",
     }),
   }),
   component: AboutPage,
-})
+});
 
 const PRINCIPLES = [
   {
-    n: '01',
-    title: 'Ship end to end',
-    body: 'Owning a feature from database schema to pixel means nothing gets lost between handoffs.',
+    n: "01",
+    title: "Ship end to end",
+    body: "Owning a feature from database schema to pixel means nothing gets lost between handoffs.",
   },
   {
-    n: '02',
-    title: 'Simple over clever',
-    body: 'Boring, well-understood tech ships faster and breaks less. Cleverness is a budget, spent rarely.',
+    n: "02",
+    title: "Simple over clever",
+    body: "Boring, well-understood tech ships faster and breaks less. Cleverness is a budget, spent rarely.",
   },
   {
-    n: '03',
-    title: 'Details are the product',
-    body: 'Empty states, loading, errors, keyboard flow — the edges are where software earns trust.',
+    n: "03",
+    title: "Details are the product",
+    body: "Empty states, loading, errors, keyboard flow — the edges are where software earns trust.",
   },
-]
+];
 
 function AboutPage() {
   return (
@@ -76,7 +76,7 @@ function AboutPage() {
                 className="absolute -inset-[18px] rounded-[32px]"
                 style={{
                   backgroundImage:
-                    'repeating-linear-gradient(80deg, rgba(20,23,28,0.06) 0 1.5px, rgba(255,255,255,0) 1.5px 30px), radial-gradient(ellipse 70% 70% at 60% 40%, rgba(15,157,140,0.18), rgba(255,255,255,0) 75%)',
+                    "repeating-linear-gradient(80deg, rgba(20,23,28,0.06) 0 1.5px, rgba(255,255,255,0) 1.5px 30px), radial-gradient(ellipse 70% 70% at 60% 40%, rgba(15,157,140,0.18), rgba(255,255,255,0) 75%)",
                 }}
               />
               {/* TODO: drop /public/portrait.jpg and swap this placeholder
@@ -102,14 +102,19 @@ function AboutPage() {
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
               {PRINCIPLES.map((p) => (
-                <Card key={p.n} className="gap-2.5 rounded-[20px] px-8 py-[30px]">
+                <Card
+                  key={p.n}
+                  className="gap-2.5 rounded-[20px] px-8 py-[30px]"
+                >
                   <span className="font-serif text-[22px] italic text-teal">
                     {p.n}
                   </span>
                   <h3 className="text-[19px] font-semibold tracking-[-0.015em] text-ink">
                     {p.title}
                   </h3>
-                  <p className="text-[15px] leading-[1.65] text-slate">{p.body}</p>
+                  <p className="text-[15px] leading-[1.65] text-slate">
+                    {p.body}
+                  </p>
                 </Card>
               ))}
             </div>
@@ -131,7 +136,9 @@ function AboutPage() {
                   key={e.company}
                   className="grid items-baseline gap-2 border-b border-[rgba(20,23,28,0.08)] py-[30px] md:grid-cols-[minmax(140px,220px)_1fr] md:gap-6"
                 >
-                  <span className="text-sm font-medium text-faint">{e.period}</span>
+                  <span className="text-sm font-medium text-faint">
+                    {e.period}
+                  </span>
                   <div className="flex flex-col gap-1.5">
                     <h3 className="text-xl font-semibold tracking-[-0.015em] text-ink">
                       {e.role} · {e.company}
@@ -176,5 +183,5 @@ function AboutPage() {
 
       <SiteFooter />
     </div>
-  )
+  );
 }

@@ -1,39 +1,46 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { Mail } from 'lucide-react'
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Mail } from "lucide-react";
 
-import { Hero } from '@/components/hero'
-import { GitHubIcon, LinkedInIcon } from '@/components/icons'
-import { PostRow } from '@/components/post-row'
-import { SiteFooter } from '@/components/site-footer'
-import { Kicker, SerifEm } from '@/components/type'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { fetchPosts } from '@/lib/blog'
-import type { PostMeta } from '@/lib/content'
-import { personJsonLd, seo } from '@/lib/seo'
-import { EXPERIENCE, PROJECTS, SHOW_BLOG, SITE, STACK, type Project } from '@/lib/site'
-import { cn } from '@/lib/utils'
+import { Hero } from "@/components/hero";
+import { GitHubIcon, LinkedInIcon } from "@/components/icons";
+import { PostRow } from "@/components/post-row";
+import { SiteFooter } from "@/components/site-footer";
+import { Kicker, SerifEm } from "@/components/type";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { fetchPosts } from "@/lib/blog";
+import type { PostMeta } from "@/lib/content";
+import { personJsonLd, seo } from "@/lib/seo";
+import {
+  EXPERIENCE,
+  PROJECTS,
+  SHOW_BLOG,
+  SITE,
+  STACK,
+  type Project,
+} from "@/lib/site";
+import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   loader: () => (SHOW_BLOG ? fetchPosts() : []),
   head: () => {
     const { meta, links } = seo({
       title: SITE.title,
       description: SITE.description,
-      path: '/',
-    })
+      path: "/",
+    });
     return {
       meta,
       links,
-      scripts: [{ type: 'application/ld+json', children: personJsonLd() }],
-    }
+      scripts: [{ type: "application/ld+json", children: personJsonLd() }],
+    };
   },
   component: HomePage,
-})
+});
 
 function HomePage() {
-  const posts = Route.useLoaderData()
+  const posts = Route.useLoaderData();
 
   return (
     <>
@@ -47,7 +54,7 @@ function HomePage() {
       </main>
       <SiteFooter />
     </>
-  )
+  );
 }
 
 /* ============ 01 · SELECTED WORK ============ */
@@ -56,20 +63,20 @@ function ProjectMedia({
   project,
   className,
 }: {
-  project: Project
-  className?: string
+  project: Project;
+  className?: string;
 }) {
   return (
     <div
       className={cn(
-        'relative bg-[linear-gradient(135deg,#f2f4f8_0%,#e9edf3_100%)]',
+        "relative bg-[linear-gradient(135deg,#f2f4f8_0%,#e9edf3_100%)]",
         className,
       )}
     >
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `repeating-linear-gradient(80deg, rgba(20,23,28,0.05) 0 1.5px, rgba(255,255,255,0) 1.5px 34px), radial-gradient(ellipse 60% 70% at ${project.glowAt}, rgba(15,157,140,${project.featured ? '0.14' : '0.12'}), rgba(255,255,255,0) 70%)`,
+          backgroundImage: `repeating-linear-gradient(80deg, rgba(20,23,28,0.05) 0 1.5px, rgba(255,255,255,0) 1.5px 34px), radial-gradient(ellipse 60% 70% at ${project.glowAt}, rgba(15,157,140,${project.featured ? "0.14" : "0.12"}), rgba(255,255,255,0) 70%)`,
         }}
       />
       {project.image ? (
@@ -89,7 +96,7 @@ function ProjectMedia({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function ProjectLink({ href }: { href: string }) {
@@ -100,20 +107,20 @@ function ProjectLink({ href }: { href: string }) {
       rel="noreferrer"
       className="mt-auto inline-flex items-center gap-[7px] self-start border-b border-transparent text-[15px] font-medium text-ink no-underline transition-colors hover:border-[rgba(20,23,28,0.4)]"
     >
-      View project{' '}
+      View project{" "}
       <span className="text-teal" aria-hidden="true">
         ↗
       </span>
     </a>
-  )
+  );
 }
 
 const cardHover =
-  'transition-[transform,box-shadow,border-color] duration-[250ms] hover:-translate-y-[3px] hover:border-[rgba(20,23,28,0.18)] hover:shadow-[0_22px_50px_rgba(20,23,28,0.10)]'
+  "transition-[transform,box-shadow,border-color] duration-[250ms] hover:-translate-y-[3px] hover:border-[rgba(20,23,28,0.18)] hover:shadow-[0_22px_50px_rgba(20,23,28,0.10)]";
 
 function WorkSection() {
-  const featured = PROJECTS.find((p) => p.featured) ?? PROJECTS[0]
-  const rest = PROJECTS.filter((p) => p !== featured)
+  const featured = PROJECTS.find((p) => p.featured) ?? PROJECTS[0];
+  const rest = PROJECTS.filter((p) => p !== featured);
 
   return (
     <section
@@ -135,7 +142,7 @@ function WorkSection() {
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6">
           {/* featured project */}
-          <Card className={cn('col-span-full flex-row flex-wrap', cardHover)}>
+          <Card className={cn("col-span-full flex-row flex-wrap", cardHover)}>
             <ProjectMedia
               project={featured}
               className="min-h-[340px] min-w-[300px] flex-[1.35]"
@@ -182,7 +189,7 @@ function WorkSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 /* ============ 02 · TECH STACK ============ */
@@ -215,7 +222,10 @@ function StackSection() {
                   <span key={item} className="contents">
                     <span>{item}</span>
                     {i < row.items.length - 1 ? (
-                      <span className="text-[rgba(20,23,28,0.22)]" aria-hidden="true">
+                      <span
+                        className="text-[rgba(20,23,28,0.22)]"
+                        aria-hidden="true"
+                      >
                         ·
                       </span>
                     ) : null}
@@ -227,7 +237,7 @@ function StackSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 /* ============ 03 · EXPERIENCE ============ */
@@ -253,7 +263,7 @@ function ExperienceSection() {
               className="grid items-baseline gap-2 border-b border-[rgba(20,23,28,0.08)] py-7 md:grid-cols-[minmax(140px,220px)_1fr] md:gap-6"
             >
               <span className="text-sm font-medium text-faint">{e.period}</span>
-              <div className="flex flex-wrap items-baseline gap-x-3.5 gap-y-1">
+              <div className="flex flex-col items-baseline gap-x-3.5 gap-y-1">
                 <h3 className="text-xl font-semibold tracking-[-0.015em] text-ink">
                   {e.role} · {e.company}
                 </h3>
@@ -266,7 +276,7 @@ function ExperienceSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 /* ============ 04 · WRITING ============ */
@@ -288,7 +298,7 @@ function WritingSection({ posts }: { posts: Array<PostMeta> }) {
               to="/blog"
               className="mb-1.5 inline-flex items-center gap-[7px] text-[15px] font-medium text-ink no-underline"
             >
-              All posts{' '}
+              All posts{" "}
               <span className="text-teal" aria-hidden="true">
                 →
               </span>
@@ -303,7 +313,7 @@ function WritingSection({ posts }: { posts: Array<PostMeta> }) {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 /* ============ 05 · CONTACT ============ */
@@ -319,7 +329,7 @@ function ContactSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_50%_50%,rgba(244,246,249,0.9)_0%,rgba(244,246,249,0.4)_55%,rgba(244,246,249,0)_100%)]" />
 
       <div className="relative mx-auto flex max-w-[760px] flex-col items-center text-center">
-        <Kicker>{SHOW_BLOG ? '05' : '04'} · Contact</Kicker>
+        <Kicker>{SHOW_BLOG ? "05" : "04"} · Contact</Kicker>
         <h2 className="mt-[18px] text-[clamp(38px,5.4vw,68px)] font-medium leading-[1.06] tracking-[-0.035em] text-ink">
           Have something in mind?
           <br />
@@ -362,5 +372,5 @@ function ContactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
