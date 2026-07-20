@@ -1,7 +1,7 @@
 # Custom domain + Vercel → Cloudflare cutover
 
 How to point **`indr.web.id`** at this Worker and permanently redirect the old
-Vercel site (`https://indrakoslab.vercel.app`) to it.
+Vercel site (`<your-old-vercel-url>`) to it.
 
 - **Worker name:** `indr-web` (see `wrangler.jsonc`)
 - **Target domain:** `indr.web.id` — DNS currently lives on **sumopod** (which
@@ -198,13 +198,13 @@ Add this file to the old Vercel project (replacing its app is fine) and redeploy
 
 - `permanent: true` emits a **308** (permanent; Google honors it like a 301 and
   preserves the path). Query strings carry over automatically.
-- After redeploy: `https://indrakoslab.vercel.app/about` →
+- After redeploy: `<your-old-vercel-url>/about` →
   `https://indr.web.id/about`, and so on for every path.
 
 Verify:
 
 ```sh
-curl -sI https://indrakoslab.vercel.app/about | grep -i location
+curl -sI <your-old-vercel-url>/about | grep -i location
 # location: https://indr.web.id/about
 ```
 
@@ -245,7 +245,7 @@ until you re-enable it. Pick one:
 
 ```sh
 curl -sI https://indr.web.id/            | head          # 200, cloudflare
-curl -sI https://indrakoslab.vercel.app/ | grep -i location   # → indr.web.id
+curl -sI <your-old-vercel-url>/ | grep -i location   # → indr.web.id
 ```
 
 - Spot-check a deep link (`/about`) end to end.

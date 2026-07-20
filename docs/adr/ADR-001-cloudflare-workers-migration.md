@@ -4,7 +4,7 @@
 - **Date:** 2026-07-02
 - **Owner:** Indra
 - **Domain:** `indr.web.id` (DNS already on Cloudflare)
-- **Replaces:** `indrakoslab.vercel.app` + blog subdomain project on Vercel
+- **Replaces:** the previous Vercel-hosted site + blog subdomain project on Vercel
 
 ---
 

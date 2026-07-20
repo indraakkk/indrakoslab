@@ -1,6 +1,6 @@
 # indr.web.id
 
-Personal site of **Indra Putra** (`indrakoslab_`) — TanStack Start on
+Personal site of **Indra Putra** (`indr_`) — TanStack Start on
 Cloudflare Workers, implementing the hero + site design from a Claude Design
 handoff.
 

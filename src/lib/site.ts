@@ -7,7 +7,7 @@
 
 export const SITE = {
   url: 'https://indr.web.id',
-  name: 'indrakoslab',
+  name: 'indr',
   author: 'Indra Putra',
   title: 'Indra Putra — Senior Fullstack Engineer',
   description:
@@ -76,7 +76,7 @@ export const PROJECTS: Array<Project> = [
     // TODO: replace with a real one-line description of Trailmark
     description:
       'A personal full-stack project — self-hosted and live. A proper write-up is on the way.',
-    href: 'https://trailmark.duckdns.org',
+    href: 'https://trailmark.indr.web.id',
     glowAt: '70% 40%',
   },
 ]

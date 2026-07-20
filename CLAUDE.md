@@ -3,14 +3,14 @@
 Guidance for Claude Code (and humans) working in this repo.
 
 > **Branch context:** this is `claude/cloudflare-workers-rebuild` — a from-scratch
-> rebuild of indrakoslab, separate from `master`. `master` is the existing
+> rebuild of indr, separate from `master`. `master` is the existing
 > TanStack Start site on **Vercel**; this branch targets **Cloudflare Workers**
 > and has an unrelated git history. Do not merge/force-push onto `master`
 > without an explicit decision. See `docs/adr/ADR-001-cloudflare-workers-migration.md`.
 
 ## What this is
 
-Personal site of Indra Putra (`indrakoslab_`), implementing a Claude Design
+Personal site of Indra Putra (`indr_`), implementing a Claude Design
 handoff. TanStack Start (React SSR + file routes), all routes prerendered at
 build, deployed as one Cloudflare Worker.
 
