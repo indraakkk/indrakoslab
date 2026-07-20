@@ -1,5 +1,5 @@
 {
-  description = "indrakoslab — TanStack Start on Cloudflare Workers dev shell";
+  description = "indr — TanStack Start on Cloudflare Workers dev shell";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -33,7 +33,7 @@
           # which would break `nix develop` on Apple Silicon.
           shellHook = ''
             export PATH="$PWD/node_modules/.bin:$PATH"
-            echo "indrakoslab devshell → node $(node -v) · bun $(bun -v)"
+            echo "indr devshell → node $(node -v) · bun $(bun -v)"
             echo "  wrangler → repo-pinned in node_modules/.bin (run 'bun install' first)"
             echo "  bun install && bun run dev   ·   bun run deploy"
           '';

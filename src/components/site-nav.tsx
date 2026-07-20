@@ -47,7 +47,7 @@ export function SiteNav({ variant = 'solid', active }: SiteNavProps) {
           onClick={() => setOpen(false)}
           className="flex items-baseline gap-[2px] text-base font-semibold tracking-[-0.01em] text-ink no-underline"
         >
-          indrakoslab<span className="text-faint">_</span>
+          indr<span className="text-faint">_</span>
         </Link>
 
         {/* desktop links */}
