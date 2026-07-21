@@ -1,5 +1,7 @@
 # indr.web.id
 
+![indr gif](indr-desktop-new.gif)
+
 Personal site of **Indra Putra** (`indr_`) — TanStack Start on
 Cloudflare Workers, implementing the hero + site design from a Claude Design
 handoff.
