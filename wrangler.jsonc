@@ -22,13 +22,13 @@
 		"html_handling": "drop-trailing-slash"
 	},
 	/**
-	 * Custom domain (cutover): uncomment to attach indr.web.id, then deploy.
-	 * Prereq: move the zone to Cloudflare first (DNS is on sumopod today) —
-	 * it's email-safe; see step 2 of the runbook. Then uncommenting is one deploy.
+	 * indr.web.id is already attached as a custom domain (done via the
+	 * Cloudflare dashboard). Declaring it here too keeps IaC in sync so a
+	 * future `wrangler deploy` doesn't drop the binding.
 	 * Full runbook (incl. Vercel → CF redirect): docs/DOMAIN-SETUP.md
 	 */
-	// "routes": [
-	// 	{ "pattern": "indr.web.id", "custom_domain": true }
-	// 	// { "pattern": "www.indr.web.id", "custom_domain": true }
-	// ]
+	"routes": [
+		{ "pattern": "indr.web.id", "custom_domain": true }
+		// { "pattern": "www.indr.web.id", "custom_domain": true }
+	]
 }
